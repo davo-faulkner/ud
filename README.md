@@ -38,10 +38,10 @@ To integrate this into your workflow:
     ```bash
     ud
 
-Script Metadata:
+## Script Metadata:
 
-Author: David (Davo) Faulkner
+* **Author:** David (Davo) Faulkner
 
-Target OS: Debian-based distributions, WSL
+* **Target OS:** Debian-based distributions, WSL
 
-Logic Flow: Update -> Check (if Upgradable) -> Upgrade (Conditional) -> Autoremove
+* **Logic Flow:** Update -> Check (if Upgradable) -> Upgrade (Conditional) -> Autoremove
