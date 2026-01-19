@@ -28,7 +28,7 @@ if [ -n "$UPGRADABLE" ]; then
     echo "Updates found. Proceeding with upgrade..."
     sudo apt upgrade -y
 else
-    echo "No upgrades available. Your system is current."
+    echo "No upgrades available. Your system is current. Upgrade skipped."
 fi
 
 # 3. Remove packages that were automatically installed to satisfy
