@@ -28,11 +28,11 @@ if [ -n "$UPGRADABLE" ]; then
     echo "Updates found. Proceeding with upgrade..."
     sudo apt upgrade -y
 else
-    echo "Status: No upgrades available. Your system is current."
+    echo "No upgrades available. Your system is current."
 fi
 
 # 3. Remove packages that were automatically installed to satisfy
 # dependencies for other packages and are now no longer needed. This helps
 # maintain a minimalist system by cleaning up orphaned libraries and tools.
-echo "Status: Removing orphaned libraries and tools, if they exist."
+echo "Removing orphaned libraries and tools, if they exist."
 sudo apt autoremove
