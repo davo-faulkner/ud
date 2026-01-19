@@ -21,22 +21,22 @@ To integrate this into your workflow:
 2. **Ensure the file is executable:**
 
     ```bash
-    chmod +x ud```
+    chmod +x ud
 
 3. **Add to your shell profile:** Append the following line to your ~/.bashrc (or ~/.zshrc if applicable):
 
     ```bash
-    export PATH="$PATH:$HOME/shared_data/bash_scripts"```
+    export PATH="$PATH:$HOME/shared_data/bash_scripts"
 
 4. **Refresh your shell:**
 
     ```bash
-    source ~/.bashrc```
+    source ~/.bashrc
 
 5. **Execute the script:** 
 
     ```bash
-    ud```
+    ud
 
 Script Metadata:
 
