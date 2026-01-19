@@ -26,7 +26,7 @@ To integrate this into your workflow:
 3. **Add to your shell profile:** Append the following line to your ~/.bashrc (or ~/.zshrc if applicable):
 
     ```bash
-    export PATH="$PATH:$HOME/shared_data/bash_scripts"
+    export PATH="$PATH:$HOME/bash_scripts"
 
 4. **Refresh your shell:**
 
