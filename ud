@@ -25,14 +25,14 @@ sudo apt update
 UPGRADABLE=$(apt list --upgradable 2>/dev/null | grep -v 'Listing...')
 
 if [ -n "$UPGRADABLE" ]; then
-    echo "Updates found. Proceeding with upgrade..."
+    echo "Proceeding with upgrade..."
     sudo apt upgrade -y
 else
-    echo "No upgrades available. Your system is current. Upgrade skipped."
+    echo "Upgrade skipped."
 fi
 
 # 3. Remove packages that were automatically installed to satisfy
 # dependencies for other packages and are now no longer needed. This helps
 # maintain a minimalist system by cleaning up orphaned libraries and tools.
-echo "Removing orphaned libraries and tools, if they exist."
+echo "Removing any orphaned libraries and tools."
 sudo apt autoremove
