@@ -19,12 +19,21 @@
 # Set strict mode for script: exit on error, undefined variables, and pipe failure.
 set -euo pipefail
 
+# Define log directory path
+log_dir="$HOME/ud_logs"
+
+# Conditional: Create the log directory if it does not already exist.
+# The -d flag checks for the existence of a directory.
+if [ ! -d "$log_dir" ]; then
+    mkdir "$log_dir"
+fi
+
 echo "Updating local cache..."
 
 # 1. Resynchronize the package index files from their sources via the 
 # network. This updates the local database of available software versions.
 # Output is mirrored to update_log.txt and parsed for the update status string.
-upgradable=$(sudo apt update 2>/dev/null | tee update_log.txt | grep 'All packages are up to date.')
+upgradable=$(sudo apt update 2>/dev/null | tee "$log_dir/update_log.txt" | grep 'All packages are up to date.')
 
 # 2. Check if there are any packages available for upgrade.
 # Logic: If the 'upgradable' variable contains the success string from the 
@@ -35,7 +44,7 @@ if [ upgradable='All packages are up to date.' ]; then
 else
     echo "Updates found."
     echo "Proceeding with upgrade..."
-    sudo apt upgrade -y 1> upgrade_log.txt 2> /dev/null
+    sudo apt upgrade -y 1> "$log_dir/upgrade_log.txt" 2> /dev/null
     echo "Upgrade complete."
 fi
 
@@ -43,5 +52,6 @@ fi
 # dependencies for other packages and are now no longer needed.
 # This cleans up orphaned libraries and tools to maintain a minimalist system.
 echo "Removing any orphaned libraries and tools."
-sudo apt autoremove 1> autoremove_log.txt 2> /dev/null
+sudo apt autoremove 1> "$log_dir/autoremove_log.txt" 2> /dev/null
+echo "Access log files at ~/ud_logs"
 echo "Update complete."

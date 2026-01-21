@@ -6,7 +6,7 @@ A technically precise Bash script designed to automate system maintenance for **
 * **Bash Strict Mode:** Utilizes `set -euo pipefail` to ensure the script exits immediately on any command errors, undefined variables, or pipeline failures.
 * **Metadata Synchronization:** Updates local package indexes and captures results in `update_log.txt`.
 * **Conditional Execution:** Dynamically compares the update status string; if the system is current, the upgrade process is bypassed to conserve resources.
-* **Auditability:** Redirects verbose output from the upgrade and cleanup phases to dedicated log files (`upgrade_log.txt` and `autoremove_log.txt`).
+* **Auditability:** Redirects verbose output from the upgrade and cleanup phases to dedicated log files (`upgrade_log.txt` and `autoremove_log.txt`) located in a managed log directory along with `update_log.txt` (~/ud_logs).
 * **Minimalist Cleanup:** Automatically purges orphaned libraries and redundant dependencies.
 
 ## Installation & Usage:
@@ -41,4 +41,4 @@ To integrate this into your workflow:
 
 * **Target OS:** Debian-based distributions, WSL
 
-* **Logic Flow:** Strict Mode Init -> Update & Log -> Conditional Check (if Upgradable) -> Upgrade & Log -> Autoremove & Log
+* **Logic Flow:** Strict Mode Init -> Log Dir Validation -> Update & Log -> Conditional Check (if Upgradable) -> Upgrade & Log -> Autoremove & Log
