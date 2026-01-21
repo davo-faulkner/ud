@@ -1,16 +1,13 @@
 # ud - Conditional Debian & WSL Maintenance Utility
 
-A technically precise Bash script designed to automate system maintenance for Debian 13 (Trixie) and WSL environments. This utility prioritizes logic and efficiency by performing conditional upgrades only when upstream changes are detected.
+A technically precise Bash script designed to automate system maintenance for **Debian 13 (Trixie)** and **WSL** environments. This utility prioritizes logic and efficiency by performing conditional upgrades only when upstream changes are detected.
 
-## Features:
-
-* **Metadata Synchronization:** Updates local package indexes to ensure repository parity.
-
-* **Conditional Execution:** Dynamically checks for available upgrades; if the system is current, the upgrade process is bypassed to conserve resources.
-
-* **Minimalist Cleanup:** Automatically purges orphaned libraries and redundant dependencies via autoremove.
-
-* **Platform Aware:** Explicitly documented for cross-compatibility between native Debian and Windows Subsystem for Linux.
+## Features
+* **Bash Strict Mode:** Utilizes `set -euo pipefail` to ensure the script exits immediately on any command errors, undefined variables, or pipeline failures.
+* **Metadata Synchronization:** Updates local package indexes and captures results in `update_log.txt`.
+* **Conditional Execution:** Dynamically compares the update status string; if the system is current, the upgrade process is bypassed to conserve resources.
+* **Auditability:** Redirects verbose output from the upgrade and cleanup phases to dedicated log files (`upgrade_log.txt` and `autoremove_log.txt`).
+* **Minimalist Cleanup:** Automatically purges orphaned libraries and redundant dependencies.
 
 ## Installation & Usage:
 
@@ -44,4 +41,4 @@ To integrate this into your workflow:
 
 * **Target OS:** Debian-based distributions, WSL
 
-* **Logic Flow:** Update -> Check (if Upgradable) -> Upgrade (Conditional) -> Autoremove
+* **Logic Flow:** Strict Mode Init -> Update & Log -> Conditional Check (if Upgradable) -> Upgrade & Log -> Autoremove & Log

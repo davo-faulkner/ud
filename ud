@@ -4,35 +4,44 @@
 
 # Author: David (Davo) Faulkner
 # Date Created: 01/19/2026
-# Date Modified: 01/19/2026
+# Date Modified: 01/20/2026
 
 # Description:
-# This script automates the standard maintenance cycle for Debian-based
-# distributions and WSL environments. It synchronizes local package metadata
-# with upstream repositories, executes a non-interactive distribution-wide
-# upgrade of all installed packages, and concludes by purging redundant
-# dependency artifacts to maintain a minimalist system footprint.
+# This script automates the standard maintenance cycle for Debian-based 
+# distributions and WSL environments. It utilizes Bash strict mode for 
+# robust error handling and implements a conditional logic flow that 
+# executes upgrades only when upstream changes are detected. Maintenance 
+# artifacts and logs are captured for auditability.
 
 # Usage:
 # ud
 
-# 1. Resynchronize the package index files from their sources via the
-# network. This does not install new versions, but updates the local
-# database of what software is available and which versions are current.
-sudo apt update
+# Set strict mode for script: exit on error, undefined variables, and pipe failure.
+set -euo pipefail
+
+echo "Updating local cache..."
+
+# 1. Resynchronize the package index files from their sources via the 
+# network. This updates the local database of available software versions.
+# Output is mirrored to update_log.txt and parsed for the update status string.
+upgradable=$(sudo apt update 2>/dev/null | tee update_log.txt | grep 'All packages are up to date.')
 
 # 2. Check if there are any packages available for upgrade.
-UPGRADABLE=$(apt list --upgradable 2>/dev/null | grep -v 'Listing...')
-
-if [ -n "$UPGRADABLE" ]; then
-    echo "Proceeding with upgrade..."
-    sudo apt upgrade -y
-else
+# Logic: If the 'upgradable' variable contains the success string from the 
+# update command, the upgrade process is bypassed to maintain efficiency.
+if [ upgradable='All packages are up to date.' ]; then
+    echo $upgradable
     echo "Upgrade skipped."
+else
+    echo "Updates found."
+    echo "Proceeding with upgrade..."
+    sudo apt upgrade -y 1> upgrade_log.txt 2> /dev/null
+    echo "Upgrade complete."
 fi
 
-# 3. Remove packages that were automatically installed to satisfy
-# dependencies for other packages and are now no longer needed. This helps
-# maintain a minimalist system by cleaning up orphaned libraries and tools.
+# 3. Remove packages that were automatically installed to satisfy 
+# dependencies for other packages and are now no longer needed.
+# This cleans up orphaned libraries and tools to maintain a minimalist system.
 echo "Removing any orphaned libraries and tools."
-sudo apt autoremove
+sudo apt autoremove 1> autoremove_log.txt 2> /dev/null
+echo "Update complete."
