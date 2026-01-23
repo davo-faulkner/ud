@@ -4,14 +4,14 @@
 
 # Author: David (Davo) Faulkner
 # Date Created: 01/19/2026
-# Date Modified: 01/20/2026
+# Date Modified: 01/22/2026
 
 # Description:
 # This script automates the standard maintenance cycle for Debian-based 
 # distributions and WSL environments. It utilizes Bash strict mode for 
-# robust error handling and implements a conditional logic flow that 
-# executes upgrades only when upstream changes are detected. Maintenance 
-# artifacts and logs are captured for auditability.
+# robust error handling and implements a numerical logic flow that 
+# executes upgrades only when a non-zero count of upgradable packages 
+# is detected. Maintenance artifacts and logs are captured for auditability.
 
 # Usage:
 # ud
@@ -30,28 +30,32 @@ fi
 
 echo "Updating local cache..."
 
-# 1. Resynchronize the package index files from their sources via the 
-# network. This updates the local database of available software versions.
-# Output is mirrored to update_log.txt and parsed for the update status string.
-upgradable=$(sudo apt update 2>/dev/null | tee "$log_dir/update_log.txt" | grep 'All packages are up to date.')
+# 1. Resynchronize the package index files from their sources. 
+# Output is redirected to a log file within the managed log directory.
+sudo apt update 1> "$log_dir/update_log.txt" 2>/dev/null
 
-# 2. Check if there are any packages available for upgrade.
-# Logic: If the 'upgradable' variable contains the success string from the 
-# update command, the upgrade process is bypassed to maintain efficiency.
-if [ upgradable='All packages are up to date.' ]; then
-    echo $upgradable
-    echo "Upgrade skipped."
-else
-    echo "Updates found."
-    echo "Proceeding with upgrade..."
+# 2. Extract the number of available upgrades by counting occurrences 
+# of the "upgradable from:" string in the 'apt list' output.
+# '|| true' ensures strict mode doesn't exit if the count is 0.
+upgrade_count=$(apt list --upgradable 2>/dev/null | grep -i -c "upgradable from:" || true)
+
+# 3. Conditional Upgrade Logic:
+# If the upgrade_count is greater than 0, the upgrade process is executed.
+# Otherwise, the upgrade is bypassed to maintain system efficiency.
+if [ "$upgrade_count" -gt 0 ]; then
+    echo "$upgrade_count updates found. Proceeding with upgrade..."
     sudo apt upgrade -y 1> "$log_dir/upgrade_log.txt" 2> /dev/null
     echo "Upgrade complete."
+else
+    echo "0 updates found. Your system is current."
+    echo "Upgrade skipped."
 fi
 
-# 3. Remove packages that were automatically installed to satisfy 
+# 4. Remove packages that were automatically installed to satisfy 
 # dependencies for other packages and are now no longer needed.
-# This cleans up orphaned libraries and tools to maintain a minimalist system.
+# This cleans up orphaned libraries to maintain a minimalist system.
 echo "Removing any orphaned libraries and tools."
 sudo apt autoremove 1> "$log_dir/autoremove_log.txt" 2> /dev/null
+
 echo "Access log files at ~/ud_logs"
 echo "Update complete."

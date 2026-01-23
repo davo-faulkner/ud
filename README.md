@@ -4,7 +4,7 @@ A technically precise Bash script designed to automate system maintenance for **
 
 ## Features
 * **Bash Strict Mode:** Utilizes `set -euo pipefail` to ensure the script exits immediately on any command errors, undefined variables, or pipeline failures.
-* **Metadata Synchronization:** Updates local package indexes and captures results in `update_log.txt`.
+* **Numerical Delta Detection:** Uses numerical package counting (`grep -c`) to determine upgrade status, ensuring high reliability and logic-driven execution.
 * **Conditional Execution:** Dynamically compares the update status string; if the system is current, the upgrade process is bypassed to conserve resources.
 * **Auditability:** Redirects verbose output from the upgrade and cleanup phases to dedicated log files (`upgrade_log.txt` and `autoremove_log.txt`) located in a managed log directory along with `update_log.txt` at `~/ud_logs`.
 * **Minimalist Cleanup:** Automatically purges orphaned libraries and redundant dependencies.
