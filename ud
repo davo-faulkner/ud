@@ -32,12 +32,12 @@ echo "Updating local cache..."
 
 # 1. Resynchronize the package index files from their sources. 
 # Output is redirected to a log file within the managed log directory.
-sudo apt update 1> "$log_dir/update_log.txt" 2>/dev/null
+sudo apt update 1> "$log_dir/update_log.txt" 2> /dev/null
 
 # 2. Extract the number of available upgrades by counting occurrences 
 # of the "upgradable from:" string in the 'apt list' output.
 # '|| true' ensures strict mode doesn't exit if the count is 0.
-upgrade_count=$(apt list --upgradable 2>/dev/null | grep -i -c "upgradable from:" || true)
+upgrade_count=$(apt list --upgradable 2> /dev/null | grep -i -c "upgradable from:" || true)
 
 # 3. Conditional Upgrade Logic:
 # If the upgrade_count is greater than 0, the upgrade process is executed.
