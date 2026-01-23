@@ -43,7 +43,7 @@ upgrade_count=$(apt list --upgradable 2>/dev/null | grep -i -c "upgradable from:
 # If the upgrade_count is greater than 0, the upgrade process is executed.
 # Otherwise, the upgrade is bypassed to maintain system efficiency.
 if [ "$upgrade_count" -gt 0 ]; then
-    echo "$upgrade_count updates found. Proceeding with upgrade..."
+    echo "$upgrade_count update(s) found. Proceeding with upgrade..."
     sudo apt upgrade -y 1> "$log_dir/upgrade_log.txt" 2> /dev/null
     echo "Upgrade complete."
 else
